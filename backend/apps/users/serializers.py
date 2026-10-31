@@ -30,11 +30,23 @@ class RegisterSerializer(serializers.ModelSerializer):
         return _validate_strong_password(value)
 
     def create(self, validated_data):
-        return User.objects.create_user(
+        from apps.customers.models import Customer
+        user = User.objects.create_user(
             email=validated_data["email"],
             password=validated_data["password"],
             role="customer",
         )
+        # Automatically generate Customer business record
+        contact = validated_data["email"].split("@")[0].capitalize()
+        Customer.objects.get_or_create(
+            user=user,
+            email=user.email,
+            defaults={
+                "company_name": f"{contact}'s Enterprise",
+                "contact_name": contact,
+            }
+        )
+        return user
 
 
 class StaffCreateSerializer(serializers.ModelSerializer):

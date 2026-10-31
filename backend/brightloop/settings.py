@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     # local
     "apps.users",
+    "apps.customers",
+    "apps.quotations",
+    "apps.subscriptions",
 ]
 
 MIDDLEWARE = [
