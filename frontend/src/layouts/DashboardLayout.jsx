@@ -15,8 +15,11 @@ import {
   Sparkles
 } from 'lucide-react';
 
+import { Link, useLocation } from 'react-router-dom';
+
 export default function DashboardLayout({ title, subtitle, role, children }) {
   const { user, logout } = useAuth();
+  const location = useLocation();
 
   const roleBadgeColors = {
     admin: 'bg-purple-50 text-purple-700 border-purple-200/80',
@@ -25,15 +28,13 @@ export default function DashboardLayout({ title, subtitle, role, children }) {
   };
 
   const navItems = [
-    { label: 'Overview', icon: BarChart3, active: true },
-    { label: 'Subscriptions', icon: Layers, active: false },
-    { label: 'Invoices', icon: Receipt, active: false },
-    { label: 'Payments', icon: CreditCard, active: false },
+    { label: 'Overview', icon: BarChart3, path: user?.role === 'admin' ? '/admin' : user?.role === 'staff' ? '/staff' : '/portal' },
+    { label: 'Quotations', icon: Receipt, path: '/quotations' },
+    { label: 'Subscriptions', icon: Layers, path: '/subscriptions' },
     ...(role === 'admin' || role === 'staff'
       ? [
-          { label: 'Customers', icon: Users, active: false },
-          { label: 'Products & Plans', icon: Building2, active: false },
-          { label: 'Discounts', icon: Tag, active: false },
+          { label: 'Customers', icon: Users, path: '#' },
+          { label: 'Products & Variants', icon: Building2, path: '#' },
         ]
       : []),
   ];
@@ -61,18 +62,20 @@ export default function DashboardLayout({ title, subtitle, role, children }) {
             <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">Main Navigation</p>
             {navItems.map((item, idx) => {
               const Icon = item.icon;
+              const isActive = item.path !== '#' && (location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path)));
               return (
-                <button
+                <Link
                   key={idx}
+                  to={item.path}
                   className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-                    item.active
+                    isActive
                       ? 'bg-indigo-50 text-indigo-700 shadow-sm'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${item.active ? 'text-indigo-600' : 'text-slate-400'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
                   {item.label}
-                </button>
+                </Link>
               );
             })}
           </div>

@@ -7,6 +7,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import QuotationList from './pages/quotations/QuotationList';
+import QuotationCreate from './pages/quotations/QuotationCreate';
+import QuotationDetail from './pages/quotations/QuotationDetail';
+import SubscriptionList from './pages/subscriptions/SubscriptionList';
+import SubscriptionDetail from './pages/subscriptions/SubscriptionDetail';
 import { Shield, Sparkles, CheckCircle2, TrendingUp, Layers, Receipt } from 'lucide-react';
 
 function ModuleOverview({ roleName, roleDesc }) {
@@ -108,6 +113,60 @@ export default function App() {
           element={
             <PrivateRoute>
               <CustomerPortal />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Quotations routes */}
+        <Route
+          path="/quotations"
+          element={
+            <PrivateRoute>
+              <DashboardLayout title="Quotation Management" subtitle="Create, review, and convert product quotes into service agreements.">
+                <QuotationList />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/quotations/new"
+          element={
+            <PrivateRoute roles={['admin', 'staff']}>
+              <DashboardLayout title="New Quotation" subtitle="Configure products, quantities, and customer pricing terms.">
+                <QuotationCreate />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/quotations/:id"
+          element={
+            <PrivateRoute>
+              <DashboardLayout title="Quotation Review" subtitle="Inspect quoted items and authorize customer terms.">
+                <QuotationDetail />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+
+        {/* Subscriptions routes */}
+        <Route
+          path="/subscriptions"
+          element={
+            <PrivateRoute>
+              <DashboardLayout title="Subscription Contracts" subtitle="Monitor active cycles, billings, and lifecycle status.">
+                <SubscriptionList />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/subscriptions/:id"
+          element={
+            <PrivateRoute>
+              <DashboardLayout title="Manage Subscription" subtitle="Inspect terms, pause, renew, or cancel active contracts.">
+                <SubscriptionDetail />
+              </DashboardLayout>
             </PrivateRoute>
           }
         />

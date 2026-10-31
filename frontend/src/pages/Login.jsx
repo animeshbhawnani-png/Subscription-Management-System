@@ -24,7 +24,13 @@ export default function Login() {
       else if (user.role === 'staff') navigate('/staff');
       else navigate('/portal');
     } catch (err) {
-      setError(err.response?.data?.error || 'Invalid credentials. Please verify your email and password.');
+      const data = err.response?.data;
+      const message =
+        data?.error ||
+        data?.detail ||
+        (typeof data === 'string' && !data.includes('<!doctype') ? data : null) ||
+        'Invalid credentials. Please verify your email and password.';
+      setError(typeof message === 'object' ? JSON.stringify(message) : message);
     } finally {
       setLoading(false);
     }
