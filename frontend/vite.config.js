@@ -7,7 +7,10 @@ export default defineConfig({
     port: 5173,
     proxy: {
       // Forward /api/* to Django dev server — no CORS issues in development
-      '/api': 'http://localhost:8000',
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
     },
   },
 })
